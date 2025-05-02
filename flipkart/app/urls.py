@@ -1,0 +1,37 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path("", views.index, name="index"),
+    path("signup/", views.signup, name="signup"),
+    path("signin/", views.signin, name="signin"),
+    path('userlogout/',views.userlogout,name='userlogout'),
+    path("req_password/", views.req_password, name="req_password"),
+    path("reset_password/<uemail>/", views.reset_password, name="reset_password"),
+    path("about/", views.about, name="about"),
+    path("contact/", views.contact, name="contact"),
+    path("searchproduct/", views.searchproduct, name="searchproduct"),
+    path("electronics_search/", views.electronics_search, name="electronics_search"),
+    path("cloths_search/", views.cloths_search, name="cloths_search"),
+    path("shoes_search/", views.shoes_search, name="shoes_search"),
+    path("serchby_pricerange/", views.serchby_pricerange, name="serchby_pricerange"),
+    path("sortingbyprice/", views.sortingbyprice, name="sortingbyprice"),
+    path('productdetail/<int:productid>/',views.productdetail,name='productdetail'),
+    path('showwishlist/',views.showwishlist,name='showwishlist'),
+    path('addtowishlist/<int:productid>/',views.addtowishlist,name='addtowishlist'),
+    path('removefromwishlist/<int:productid>/',views.removefromwishlist,name='removefromwishlist'),
+    path('showcarts/',views.showcarts,name='showcarts'),
+    path('updateqty/<int:qv>/<int:productid>/',views.updateqty,name='updateqty'),
+    path('removefromcart/<int:productid>/',views.removefromcart,name='removefromcart'),
+    path('addtocart/<int:productid>/',views.addtocart,name='addtocart'),
+    path('addprofile/',views.addprofile,name='addprofile'),
+    path('addaddress/',views.addaddress,name='addaddress'),
+    path('myprofile/',views.myprofile,name='myprofile'),
+    path('editprofile/<int:profileid>/',views.editprofile,name='editprofile'),
+    path('deleteprofile/<int:profileid>/',views.deleteprofile,name='deleteprofile'),
+    path('deleteaddress/<int:addressid>/',views.deleteaddress,name='deleteaddress'),
+    path('editaddress/<int:addressid>/',views.editaddress,name='editaddress'),
+    path('checkout/',views.checkout,name='checkout'),
+    path('checkoutsingle/<int:productid>/',views.checkoutsingle,name='checkoutsingle'),
+    path('placeorder/',views.placeorder,name='placeorder')
+]

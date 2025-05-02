@@ -1,0 +1,55 @@
+{% extends 'base.html' %} {% load static %} {% block title %}Filpkart|Wishlist
+{% endblock %} {% block body %}
+<div class="container">
+  <h3>Your Wishlist</h3>
+  <hr />
+    {% for m in messages %}
+    <div class="alert alert-warning">
+        <p>{{m}}</p>
+    </div>
+    {% endfor %}
+
+  {% for product in wishlist_items %}
+  <div class="row">
+    <div class="col-md-6 mt-3 text-center">
+      <img
+        src="{{product.productid.images.url}}"
+        alt="{{product.productid.productname}}"
+        width="400px"
+        height="500px"
+      />
+    </div>
+
+    <div class="col-md-6 mt-3">
+      <div class="card-header fw-bold">Product Details</div>
+      <div class="card-body">
+        <h5 class="card-title">{{product.productid.productname}}</h5>
+        <p class="card-text text-success fw-bold">Special Price</p>
+        <p class="card-text">
+          <strong>Rs: ₹{{product.productid.price}} </strong>
+        </p>
+        <p class="card-text">{{product.productid.description}}</p>
+        <h3 class="card-text fw-bold">
+          Available Quantity:{{product.productid.quantity_available}}
+        </h3>
+        <p class="card-text fw-bold">Available Offers</p>
+        <ul>
+          <li>Bank offer 10% Debit/Credit</li>
+          <li>Bank offer 50% Unlimited cashback</li>
+          <li>No cost EMI 3,333/month.</li>
+        </ul>
+        <a href="{% url 'addtocart' product.productid.productid %}" class="btn btn-primary">Add to cart</a>
+        <a href="{% url 'removefromwishlist' product.productid.productid  %}" class="btn btn-success">Remove</a>
+        <a href="/" class="btn btn-danger">Back</a>
+      </div>
+    </div>
+  </div>
+
+  {% empty %}
+  <div class="alert alert-info">
+    <p>Your wishlist is empty. Start adding products</p>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}

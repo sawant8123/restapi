@@ -1,0 +1,246 @@
+{% extends 'base.html' %} {% load static %} {% block title %}Filpkart|Index {% endblock %} {% block body %}
+
+<!-- categories -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col">
+      <img
+        src="{% static 'images/appliances.png' %}"
+        width="80px"
+        height="70px"
+      />
+      <p><a href="{% url 'electronics_search' %}">Appliances</a></p>
+    </div>
+
+    <div class="col">
+      <img
+        src="{% static 'images/babyproducts.png' %}"
+        width="80px"
+        height="70px"
+      />
+      <p><a href="#">Baby Products</a></p>
+    </div>
+
+    <div class="col">
+      <img src="{% static 'images/beauty.png' %}" width="80px" height="70px" />
+      <p><a href="#">Beauty Products</a></p>
+    </div>
+
+    <div class="col">
+      <img src="{% static 'images/fashion.png' %}" width="80px" height="70px" />
+      <p><a href="{% url 'cloths_search' %}">Fashion</a></p>
+    </div>
+
+    <div class="col">
+      <img
+        src="{% static 'images/furniture.png' %}"
+        width="80px"
+        height="70px"
+      />
+      <p><a href="#">Furniture</a></p>
+    </div>
+
+    <div class="col">
+      <img src="{% static 'images/grocery.png' %}" width="80px" height="70px" />
+      <p><a href="#">Grocery</a></p>
+    </div>
+
+    <div class="col">
+      <img src="{% static 'images/kitchen.png' %}" width="80px" height="70px" />
+      <p><a href="#">Kitchen</a></p>
+    </div>
+
+    <div class="col">
+      <img src="{% static 'images/travel.png' %}" width="80px" height="70px" />
+      <p><a href="#">Travel</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- main -->
+<div class="container-fluid">
+  <div class="row">
+    <!-- filters -->
+    <div class="col-md-2">
+      <div>
+        <h5>Search by category</h5>
+        <div class="dropdown">
+          <button
+            class="btn btn-primary dropdown-toggle"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Select Category
+          </button>
+          <ul class="dropdown-menu">
+            {% for c in allcategories %} {% if c.name == 'Electronics' %}
+            <li>
+              <a class="dropdown-item" href="{%  url 'electronics_search' %}"
+                >{{c.name}}</a
+              >
+            </li>
+            {% elif c.name == 'Cloths' %}
+            <li>
+              <a class="dropdown-item" href="{%  url 'cloths_search' %}"
+                >{{c.name}}</a
+              >
+            </li>
+            {% elif c.name == 'Shoes' %}
+            <li>
+              <a class="dropdown-item" href="{%  url 'shoes_search' %}"
+                >{{c.name}}</a
+              >
+            </li>
+
+            {% else %}
+            <li>
+              <a class="dropdown-item" href="#">{{c.name}}</a>
+            </li>
+            {% endif %} {% endfor %}
+          </ul>
+        </div>
+      </div>
+
+      <div class="mt-3">
+        <h5>Search By Price Range</h5>
+        <hr />
+        <form method="post" action="{% url 'serchby_pricerange' %}">
+          {% csrf_token %}
+          <input
+            class="form-control"
+            type="number"
+            name="min"
+            placeholder="Min Price"
+            required
+          /><br />
+          <input
+            class="form-control"
+            type="number"
+            name="max"
+            placeholder="Max Price"
+            required
+          /><br />
+          <input type="submit" class="btn btn-danger" value="Submit" />
+        </form>
+      </div>
+
+      <div class="mt-3">
+        <h5>Sort By Price</h5>
+        <hr />
+        <a href="/sortingbyprice/?sort=low_to_high">Low to High</a><br />
+        <a href="/sortingbyprice/?sort=high_to_low">High to Low</a><br />
+        <hr />
+      </div>
+    </div>
+
+    <div class="col-md-10">
+      <!-- carousel -->
+
+      <div class="container-fluid mt-3">
+        <div
+          id="carouselExampleInterval"
+          class="carousel slide"
+          data-bs-ride="carousel"
+        >
+          <div class="carousel-inner">
+            <div class="carousel-item active" data-bs-interval="1000">
+              <img
+                src="{% static 'images/banner1.png' %}"
+                class="d-block w-100"
+                alt="..."
+                width="200px"
+                height="200px"
+              />
+            </div>
+            <div class="carousel-item" data-bs-interval="1000">
+              <img
+                src="{% static 'images/banner2.png' %}"
+                class="d-block w-100"
+                alt="..."
+                width="200px"
+                height="200px"
+              />
+            </div>
+            <div class="carousel-item" data-bs-interval="1000">
+              <img
+                src="{% static 'images/banner3.png' %}"
+                class="d-block w-100"
+                alt="..."
+                width="200px"
+                height="200px"
+              />
+            </div>
+          </div>
+          <button
+            class="carousel-control-prev"
+            type="button"
+            data-bs-target="#carouselExampleInterval"
+            data-bs-slide="prev"
+          >
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button
+            class="carousel-control-next"
+            type="button"
+            data-bs-target="#carouselExampleInterval"
+            data-bs-slide="next"
+          >
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- cards -->
+      <div class="container-fluid mt-3">
+        <div class="row">
+          {% for m in messages %}
+          <h1 class="text-center"><mark>{{m}}</mark></h1>
+          {% endfor %} {% for x in allproducts %}
+          <div class="col-md-3 mt-3">
+            <div class="card text-center" style="width: 15rem">
+              <img
+                src="{{x.images.url}}"
+                class="card-img-top"
+                alt="{{x.productname}}"
+                width="100px"
+                height="150px"
+              />
+              <div class="card-body">
+                <h5 class="card-title">{{x.productname}}</h5>
+                <p class="card-text">{{x.description}}</p>
+                <p class="card-text">
+                  {{x.categories}}|{{x.subcategories}}|{{x.subcategories.gender}}
+                </p>
+                <p class="card-text">Price:{{x.price}}</p>
+                <a href="{% url 'productdetail' x.productid %}" class="btn btn-primary">View More</a>
+                <a href="{% url 'addtowishlist' x.productid %}"><i class="bi bi-heart-fill"></i></a>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- fixed image-->
+
+      <div class="container-fluid mt-3">
+        <div class="row">
+          <div class="col">
+            <img src="{% static 'images/offer1.png' %}" style="width: 330px" />
+          </div>
+          <div class="col">
+            <img src="{% static 'images/offer2.png' %}" style="width: 330px" />
+          </div>
+          <div class="col">
+            <img src="{% static 'images/offer3.png' %}" style="width: 330px" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends 'base.html' %} {% block title %}SignIN{% endblock %} {% block body %}
+<div class="container mt-5 d-flex justify-content-center">
+  <div class="row">
+    <h1 class="text-center">SignIN</h1>
+    {% if errmsg %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <strong>Error!</strong> {{errmsg}}
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">UserName</label>
+        <input
+          type="text"
+          class="form-control"
+          id="exampleInputEmail1"
+          aria-describedby="emailHelp"
+          name="uname"
+          required
+        />
+        <div id="emailHelp" class="form-text">
+          We'll never share your username with anyone else.
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Email address</label>
+        <input
+          type="email"
+          class="form-control"
+          id="exampleInputEmail1"
+          aria-describedby="emailHelp"
+          name="uemail"
+          required
+        />
+        <div id="emailHelp" class="form-text">
+          We'll never share your email with anyone else.
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          id="exampleInputPassword1"
+          name="upass"
+          required
+        />
+      </div>
+      <div class="mb-3 form-check">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="exampleCheck1"
+          required
+        />
+        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+        <a href="{% url 'req_password' %}">Forgot Password</a>
+      </div>
+
+      <p>
+        Sign with
+        <a href="#"><i class="bi bi-google"></i></a>
+      </p>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

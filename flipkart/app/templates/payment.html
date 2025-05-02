@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}FlipKart|PlaceOrder{% endblock %}
+{% block body %}
+<div class="container">
+    <h2 class="mb-3 text-center">Order Summary</h2>
+    <div class="card mb-3">
+        <div class="card-body">
+            <p><strong>Customer Name:</strong>{{profile.userid}}</p>
+            <p><strong>Email:</strong>{{profile.userid.email}}</p>
+            <p><strong>Mobile:</strong>{{profile.mobile}}</p>
+            <p><strong>Address:</strong>{{address.address}}</p>
+            <p><strong>City:</strong>{{address.city.name}}</p>
+            <p><strong>Country:</strong>{{address.country.name}}</p>
+            <p><strong>Pincode:</strong>{{address.pincode}}</p>
+        </div>
+        <h2>Total Payment:{{total}}</h2>
+    </div>
+    <a href="#" class="btn btn-danger">Pay Now</a>
+</div>
+{% endblock %}

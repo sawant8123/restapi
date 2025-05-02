@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}FlipKart|MYProfile{% endblock %}
+{% block body %}
+<div class="container mt-4">
+    <h2>My Profile</h2>
+
+    {% if userprofile %}
+    <div class="card mb-4">
+        <div class="card-body">
+            <p><strong>Name:</strong>{{userid}}</p>
+            <p><strong>Email:</strong>{{userid.email}}</p>
+            <p><strong>Mobile:</strong>{{userprofile.mobile}}</p>
+            <p><strong>Gender:</strong>{{userprofile.gender}}</p>
+            <p><strong>DOB:</strong>{{userprofile.dob}}</p>
+            <img src="{{userprofile.photo.url}}" alt="{{userid}}" width="250" height="200">
+
+            <div class="mt-3">
+                <a href="{% url 'editprofile' userprofile.id  %}" class="btn btn-primary">Edit Profile</a>
+                <a href="{% url 'deleteprofile' userprofile.id  %}" class="btn btn-danger" onclick="return confirm('Are you sure want to delete your profile?')">Delete Profile</a>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-warning">
+        No profile found.Please <a href="{% url 'addprofile' %}">complete your profile</a>
+    </div>
+    {% endif %}
+
+    <h2>My Addresses</h2>
+
+    {%  if  addresses %}
+    {% for a in addresses %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <p><strong>Address:</strong>{{a.address}}</p>
+            <p><strong>City:</strong>{{a.city.name}}</p>
+            <p><strong>Country:</strong>{{a.country.name}}</p>
+            <p><strong>Pincode:</strong>{{a.pincode}}</p>
+            <div class="mt-2">
+                <a href="{% url 'editaddress' a.id %}" class="btn btn-primary">Edit Address</a>
+                <a href="{% url 'deleteaddress' a.id  %}" class="btn btn-danger" onclick="return confirm('Are you sure want to delete this address?')">Delete Address</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="alert alert-warning">
+        No addresses found.Please <a href="{% url 'addaddress' %}">add an address.</a>
+    </div>
+    {% endif %}
+
+    <div class="mt-3">
+        <a href="{% url 'addaddress' %}" class="btn btn-success">Add another address</a>
+    </div>
+    
+
+</div>
+
+{% endblock %}
