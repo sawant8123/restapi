@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Payment Successful{% endblock %}
+
+{% block body %}
+<div class="container py-5 text-center">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-body p-5">
+                    <img src="https://img.icons8.com/clouds/100/000000/checked.png" alt="Success Icon" class="mb-4">
+                    <h2 class="fw-bold text-success">Payment Successful!</h2>
+                    <p class="text-muted">Thank you for your purchase. Your order has been placed successfully.</p>
+
+                    <hr class="my-4">
+
+                    <div class="text-start mb-4">
+                        <h5 class="fw-semibold">Order Summary</h5>
+                        <p><strong>Order ID:</strong> {{ order_id }}</p>
+                        <p><strong>Payment ID:</strong> {{ payment_id }}</p>
+                        <p><strong>Amount Paid:</strong> ₹{{ amount }}</p>
+                        <p><strong>Email:</strong> {{ user.email }}</p>
+                    </div>
+
+                    <a href="/" class="btn btn-primary btn-lg mt-3">Continue Shopping</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

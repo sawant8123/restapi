@@ -1,20 +1,134 @@
 {% extends 'base.html' %}
-{% block title %}FlipKart|PlaceOrder{% endblock %}
+{% block title %}FlipKart | Place Order{% endblock %}
 {% block body %}
-<div class="container">
-    <h2 class="mb-3 text-center">Order Summary</h2>
-    <div class="card mb-3">
-        <div class="card-body">
-            <p><strong>Customer Name:</strong>{{profile.userid}}</p>
-            <p><strong>Email:</strong>{{profile.userid.email}}</p>
-            <p><strong>Mobile:</strong>{{profile.mobile}}</p>
-            <p><strong>Address:</strong>{{address.address}}</p>
-            <p><strong>City:</strong>{{address.city.name}}</p>
-            <p><strong>Country:</strong>{{address.country.name}}</p>
-            <p><strong>Pincode:</strong>{{address.pincode}}</p>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Order Summary Header -->
+            <div class="text-center mb-4">
+                <h2 class="fw-bold">🛒 Review Your Order</h2>
+                <p class="text-muted">Please verify your details before proceeding to payment.</p>
+            </div>
+
+            <!-- Customer & Address Info -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <strong>Customer & Shipping Information</strong>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <p><strong>Name:</strong> {{ profile.userid }}</p>
+                            <p><strong>Email:</strong> {{ profile.userid.email }}</p>
+                            <p><strong>Mobile:</strong> {{ profile.mobile }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Address:</strong> {{ address.address }}</p>
+                            <p><strong>City:</strong> {{ address.city.name }}</p>
+                            <p><strong>Country:</strong> {{ address.country.name }}</p>
+                            <p><strong>Pincode:</strong> {{ address.pincode }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cart Items -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <strong>Products in Your Cart</strong>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in cartdata %}
+                                <tr>
+                                    <td>{{ item.productname }}</td>
+                                    <td>{{ item.qty }}</td>
+                                    <td>₹{{ item.price }}</td>
+                                    <td><strong>₹{{ item.subtotal }}</strong></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total & Pay Button -->
+            <div class="d-flex justify-content-between align-items-center">
+                <h4>Total Amount: <span class="text-success">₹{{ total }}</span></h4>
+                <!-- <a href="#" class="btn btn-success btn-lg px-5">💳 Pay Now</a> -->
+                <div class="text-center mt-4">
+                    <button id="rzp-button" class="btn btn-success btn-lg">💳 Pay Now</button>
+                </div>
+            </div>
         </div>
-        <h2>Total Payment:{{total}}</h2>
     </div>
-    <a href="#" class="btn btn-danger">Pay Now</a>
 </div>
+
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+
+<script>
+    var options = {
+        "key": "{{ razorpay_key }}",
+        "amount": "{{ amount }}",
+        "currency": "INR",
+        "name": "FlipKart Clone",
+        "description": "Purchase",
+        "order_id": "{{ order_id }}",
+// Inside your Razorpay handler
+handler: function (response) {
+    fetch('/payment/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_signature: response.razorpay_signature
+        })
+    })
+    .then(res => {
+        if (!res.ok) {
+            throw new Error("Payment processing failed on the server");
+        }
+        return res.json();
+    })
+    .then(data => {
+        if (data.redirect_url) {
+            window.location.href = data.redirect_url;
+        } else if (data.status === "success") {
+            window.location.href = "/payment_success/";
+        } else {
+            alert("Payment failed. Please contact support.");
+        }
+    })
+    .catch(err => {
+        console.error("Payment Error:", err);
+        alert("Something went wrong. Please try again.");
+    });
+}
+
+
+
+
+    };
+    var rzp1 = new Razorpay(options);
+    document.getElementById('rzp-button').onclick = function(e){
+        rzp1.open();
+        e.preventDefault();
+    }
+</script>
 {% endblock %}

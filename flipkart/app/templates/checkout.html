@@ -1,57 +1,105 @@
 {% extends 'base.html' %}
-{% block title %}FlipKart|Checkout{% endblock %}
+{% block title %} FlipKart | Checkout {% endblock %}
 {% block body %}
-<div class="container">
-    <h2 class="mb-3 text-center">Checkout</h2>
-    <form method="post" >
-        {% csrf_token %}
-        <p><strong>Customer Name:</strong>{{userid}}</p>
-        <p><strong>Email:</strong>{{email}}</p>
-        <p><strong>Mobile:</strong>{{mobile}}</p>
-        {% for a in address %}
-        <div class="card mb-3">
-            <div class="card-body">
-                <center>
-                    <input type="radio" name="address_id" value="{{a.id}}" required>
-                    <strong>Address {{forloop.counter}}:</strong><br>
-                </center>
-                
-                <p><strong>Address:</strong>{{a.address}}</p>
-                <p><strong>City:</strong>{{a.city.name}}</p>
-                <p><strong>Country:</strong>{{a.country.name}}</p>
-                <p><strong>Pincode:</strong>{{a.pincode}}</p>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Checkout Header -->
+            <div class="text-center mb-4">
+                <h2 class="fw-bold">🧾 Checkout</h2>
+                <p class="text-muted">Confirm your address and order details before placing the order.</p>
             </div>
-        </div>
-        {% endfor %}
 
-        <h4 class="mt-4 mb-3">Cart Summary</h4>
-        <table class="table table-bordered">
-            <thead>
-                <th>Sr.No</th>
-                <th>Product</th>
-                <th>Qty</th>
-                <th>Price</th>
-                <th>Subtotal</th>
-            </thead>
-            <tbody>
-                {% for c in cartdata %}
-                <tr>
-                    <td>{{forloop.counter}}</td>
-                    <td>{{c.productname}}</td>
-                    <td>{{c.qty}}</td>
-                    <td>₹{{c.price}}</td>
-                    <td>₹{{c.subtotal}}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+            <form method="post" action="{% url 'placeorder' %}">
+                {% csrf_token %}
 
-        <h4 class="text-right mt-3">Total: ₹{{total}}</h4>
-        <div class="text-center mt-3">
-            <!-- <button type="submit" class="btn btn-success">Place Order</button> -->
-            <a href="{% url 'placeorder' %}" class="btn btn-success">Place Order</a>
-            <a href="{% url 'showcarts' %}" class="btn btn-danger">Cancel</a>
+                {% if cartdata|length == 1 %}
+                <input type="hidden" name="product_id" value="{{ cartdata.0.productid }}">
+                <input type="hidden" name="single_product" value="true">
+                {% endif %}
+
+                <!-- Customer Info -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        Customer Information
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Name:</strong> {{ userid }}</p>
+                        <p><strong>Email:</strong> {{ email }}</p>
+                        <p><strong>Mobile:</strong> {{ mobile }}</p>
+                    </div>
+                </div>
+
+                <!-- Address Selection -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-secondary text-white">
+                        Select Shipping Address
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-4">
+                            {% for a in address %}
+                            <div class="col-md-6">
+                                <div class="border rounded p-3 h-100">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="address_id" id="address{{forloop.counter}}" value="{{ a.id }}" required>
+                                        <label class="form-check-label" for="address{{forloop.counter}}">
+                                            <strong>Address {{ forloop.counter }}</strong>
+                                        </label>
+                                    </div>
+                                    <p class="mb-1"><strong>Address:</strong> {{ a.address }}</p>
+                                    <p class="mb-1"><strong>City:</strong> {{ a.city.name }}</p>
+                                    <p class="mb-1"><strong>Country:</strong> {{ a.country.name }}</p>
+                                    <p><strong>Pincode:</strong> {{ a.pincode }}</p>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cart Summary -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-info text-white">
+                        Order Summary
+                    </div>
+                    <div class="card-body table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Sr. No</th>
+                                    <th>Product</th>
+                                    <th>Qty</th>
+                                    <th>Price</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for c in cartdata %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ c.productname }}</td>
+                                    <td>{{ c.qty }}</td>
+                                    <td>₹{{ c.price }}</td>
+                                    <td><strong>₹{{ c.subtotal }}</strong></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <h4 class="text-end text-success mt-3">Total: ₹{{ total }}</h4>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-success btn-lg px-4 me-3">
+                        ✅ Place Order
+                    </button>
+                    <a href="{% url 'showcarts' %}" class="btn btn-outline-danger btn-lg px-4">
+                        ❌ Cancel
+                    </a>
+                </div>
+            </form>
         </div>
-    </form>
+    </div>
 </div>
 {% endblock %}

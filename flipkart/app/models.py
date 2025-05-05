@@ -117,12 +117,12 @@ class Wishlist(models.Model):
 class Orders(models.Model):
     PAYMENT_STATUS_CHOICES = (
         ("PENDING", "PENDING"),
-        ("PAID", "PENDING"),
+        ("PAID", "PAID"),
         ("FAILED", "FAILED"),
         ("REFUNDED", "REFUNDED"),
     )
 
-    orderid = models.PositiveIntegerField(primary_key=True)
+    orderid = models.AutoField(primary_key=True)
     userid = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, default=None)
     productid = models.ForeignKey(
         Products, on_delete=models.SET_NULL, null=True, default=None
@@ -150,7 +150,7 @@ class Payments(models.Model):
         ("FAILED", "FAILED"),
     )
 
-    receiptid = models.PositiveIntegerField(primary_key=True)
+    receiptid = models.AutoField(primary_key=True)
     orderid = models.ForeignKey(
         Orders, on_delete=models.SET_NULL, null=True, default=None
     )
